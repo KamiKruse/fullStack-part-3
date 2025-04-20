@@ -31,8 +31,19 @@ const body = `
 server.get("/", (req, res) => {
   res.send("<div>Hello from express</div>");
 });
+
 server.get("/api/persons", (req, res) => {
   res.json(persons);
+});
+server.get("/api/persons/:id", (req, res) => {
+  const id = req.params.id;
+  const person = persons.find((entry) => entry.id === id);
+  if (person) {
+    res.json(person);
+  } else {
+    res.statusMessage = "Person not found in the phonebook";
+    res.status(404).end();
+  }
 });
 
 server.get("/api/info", (req, res) => {
