@@ -35,6 +35,7 @@ server.get("/", (req, res) => {
 server.get("/api/persons", (req, res) => {
   res.json(persons);
 });
+
 server.get("/api/persons/:id", (req, res) => {
   const id = req.params.id;
   const person = persons.find((entry) => entry.id === id);
@@ -43,6 +44,16 @@ server.get("/api/persons/:id", (req, res) => {
   } else {
     res.statusMessage = "Person not found in the phonebook";
     res.status(404).end();
+  }
+});
+server.delete("/api/persons/:id", (req, res) => {
+  const id = req.params.id;
+  const person = persons.filter((entry) => entry.id !== id);
+  if (person) {
+    res.json(person);
+  } else {
+    res.statusMessage = "Person not found in the phonebook";
+    res.status(204).end();
   }
 });
 
