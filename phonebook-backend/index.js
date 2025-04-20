@@ -22,11 +22,21 @@ const persons = [
     number: "39-23-6423122",
   },
 ];
+const date = new Date();
+const body = `
+<div>Phonebook has info for ${persons.length} persons</div>
+<br>
+<div>${date.toString()}</div>
+`;
 server.get("/", (req, res) => {
   res.send("<div>Hello from express</div>");
 });
 server.get("/api/persons", (req, res) => {
   res.json(persons);
+});
+
+server.get("/api/info", (req, res) => {
+  res.send(body);
 });
 
 const PORT = 3001;
