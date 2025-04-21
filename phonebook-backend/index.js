@@ -1,8 +1,15 @@
 const express = require("express");
 const morgan = require("morgan");
 const server = express();
-server.use(morgan("tiny"));
 server.use(express.json());
+morgan.token("content", function getContent(req) {
+  return JSON.stringify(req.body);
+});
+server.use(
+  morgan(
+    ":method :url :status :response-time ms :content"
+  )
+);
 let persons = [
   {
     id: "1",
@@ -25,6 +32,7 @@ let persons = [
     number: "39-23-6423122",
   },
 ];
+
 const date = new Date();
 const body = `
 <div>Phonebook has info for ${persons.length} persons</div>
