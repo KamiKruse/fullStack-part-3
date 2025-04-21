@@ -1,6 +1,7 @@
 const express = require("express");
 const server = express();
-const persons = [
+server.use(express.json());
+let persons = [
   {
     id: "1",
     name: "Arto Hellas",
@@ -28,6 +29,11 @@ const body = `
 <br>
 <div>${date.toString()}</div>
 `;
+const generateID = () => {
+  const rand = Math.floor(Math.random() * 100000 + 5);
+  return rand;
+};
+
 server.get("/", (req, res) => {
   res.send("<div>Hello from express</div>");
 });
@@ -46,6 +52,7 @@ server.get("/api/persons/:id", (req, res) => {
     res.status(404).end();
   }
 });
+
 server.delete("/api/persons/:id", (req, res) => {
   const id = req.params.id;
   const person = persons.filter((entry) => entry.id !== id);
@@ -55,6 +62,30 @@ server.delete("/api/persons/:id", (req, res) => {
     res.statusMessage = "Person not found in the phonebook";
     res.status(204).end();
   }
+});
+server.post("/api/persons", (req, res) => {
+  const body = req.body;
+  const id = generateID();
+  const test = persons.find(
+    (person) => person.name.toLowerCase() === body.name.toLowerCase()
+  );
+  if (!body.name || !body.number) {
+    return res.status(400).json({
+      error: "Name or number missing",
+    });
+  }
+  if (test) {
+    return res.status(400).json({
+      error: "Name already exists in the phonebook",
+    });
+  }
+  const person = {
+    id: id,
+    name: body.name,
+    number: body.number,
+  };
+  persons = persons.concat(person);
+  res.json(persons);
 });
 
 server.get("/api/info", (req, res) => {
