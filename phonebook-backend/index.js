@@ -71,12 +71,12 @@ server.post("/api/persons", (req, res) => {
   );
   if (!body.name || !body.number) {
     return res.status(400).json({
-      error: "Name or number missing",
+      error: "name or number missing",
     });
   }
   if (test) {
     return res.status(400).json({
-      error: "Name already exists in the phonebook",
+      error: "name must be unique",
     });
   }
   const person = {
