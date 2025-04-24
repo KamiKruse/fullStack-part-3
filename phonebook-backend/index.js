@@ -1,15 +1,14 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 const server = express();
+server.use(express.static("dist"));
 server.use(express.json());
 morgan.token("content", function getContent(req) {
   return JSON.stringify(req.body);
 });
-server.use(
-  morgan(
-    ":method :url :status :response-time ms :content"
-  )
-);
+server.use(cors());
+server.use(morgan(":method :url :status :response-time ms :content"));
 let persons = [
   {
     id: "1",
@@ -30,6 +29,11 @@ let persons = [
     id: "4",
     name: "Mary Poppendieck",
     number: "39-23-6423122",
+  },
+  {
+    id: "5",
+    name: "Mary pop-my-dick",
+    number: "69-69-696969",
   },
 ];
 
@@ -102,7 +106,7 @@ server.get("/api/info", (req, res) => {
   res.send(body);
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
   console.log(`listening on Port: ${PORT}`);
 });
